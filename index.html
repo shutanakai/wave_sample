@@ -23,35 +23,19 @@
 
     <script src="./lib/perlin.js"></script>
     <script>
-      let stageW = 0; // 画面の幅
-      let stageH = 0; // 画面の高さ
+      let stageW = 0;
+      let stageH = 0;
 
-      // canvas要素の参照を取得
       const canvas = document.querySelector("canvas");
-      // 2Dの描画命令群を取得
       const context = canvas.getContext("2d");
 
-      noise.seed(Math.random() * (0.5 - 0.49) + 0.49);
-
-      resize();
-      tick();
-      window.addEventListener("resize", resize);
-
-      /** エンターフレームのタイミングです。 */
-      function tick() {
-        requestAnimationFrame(tick);
-        const time = Date.now() / 4000;
-        draw(time);
-      }
-
-      /** 描画します。 */
-      function draw(time) {
+      const draw = (time) => {
         // 画面をリセット
         context.clearRect(0, 0, stageW, stageH);
         context.lineWidth = 1;
 
-        const amplitude = stageH / 5; // 振幅（縦幅)の大きさ
-        const lineNum = 60; // ラインの数
+        const amplitude = stageH / 3; // 振幅（縦幅)の大きさ
+        const lineNum = 50; // ラインの数
         const segmentNum = 150; // 分割数
 
         [...new Array(lineNum).keys()].forEach((j) => {
@@ -75,16 +59,27 @@
           });
           context.stroke();
         });
-      }
+      };
 
-      /** リサイズ時のイベントです。 */
-      function resize() {
+      const resize = () => {
         stageW = innerWidth * devicePixelRatio;
         stageH = innerHeight * devicePixelRatio;
 
         canvas.width = stageW;
         canvas.height = stageH;
-      }
+      };
+
+      const tick = () => {
+        requestAnimationFrame(tick);
+        const time = Date.now() / 4000;
+        draw(time);
+      };
+
+      noise.seed(Math.random());
+
+      resize();
+      tick();
+      window.addEventListener("resize", resize);
     </script>
   </body>
 </html>
